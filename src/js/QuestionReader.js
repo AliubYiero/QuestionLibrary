@@ -268,5 +268,4 @@ export default class QuestionReader {
 		this.parseQuestionString.questions = Array.from(this.parseQuestionString.questions.values())
 		return JSON.stringify(this.parseQuestionString);
 	}
-
 }

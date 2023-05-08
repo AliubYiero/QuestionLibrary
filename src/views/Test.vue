@@ -20,9 +20,12 @@
 			</vue-lazy-component>
 		</div>
 		<template>
-			<el-button v-if="false" @click.native="() => {this.questionLibrary.questions = questions}">
-				<!-- TODO： 查看错题之后还能返回查看题目 -->
-				查看题目
+			<el-button
+					tabindex="999"
+					@keydown.enter.native="setOriginQuestions"
+					@click.native="setOriginQuestions"
+			>
+				重新做题
 			</el-button>
 			<el-button @click.native="setWrongQuestions">
 				查看错题
@@ -34,6 +37,7 @@
 
 <script>
 import Question from "@/components/Question.vue";
+import SessionStorage from "@/js/SessionStorage";
 
 export default {
 	name: "Test",
@@ -58,6 +62,9 @@ export default {
 		isLoop: {
 			type: Boolean,
 			default: false,
+		},
+		md5Key: {
+			type: String,
 		}
 	},
 
@@ -91,6 +98,7 @@ export default {
 
 		/* 限制题目数量 */
 		questionNumberLimiter() {
+			console.log(1);
 			let questionsIndex = [];
 			// console.log(this.questionLibrary.questions.length);
 			for (let i = 0; i < this.questionLibrary.questions.length; i++) {
@@ -121,8 +129,13 @@ export default {
 		},
 		setWrongQuestions() {
 			this.questionLibrary.questions = Array.from(this.wrongQuestions.values())
+		},
+		setOriginQuestions() {
+			const sessionStorage = new SessionStorage();
+			this.questionLibrary = JSON.parse(sessionStorage.get(this.md5Key))
+			this.defaultSetting()
+			scrollTo(0, 0)
 		}
-
 	},
 
 	mounted() {

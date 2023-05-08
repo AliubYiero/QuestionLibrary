@@ -46,12 +46,17 @@ export default {
 			fileReader.readAsText(file);
 			fileReader.onload = () => {
 
+				const fileMd5 = md5(file)
+				const sessionStorage = new SessionStorage();
+				sessionStorage.set(fileMd5, fileReader.result)
+				console.log(fileMd5);
+				this.$emit('md5Check', fileMd5)
+
 				// 直接返回json数据
 				if (file.type === 'application/json') {
 					// console.log(fileReader.result);
 					const sessionStorage = new SessionStorage
-					sessionStorage.set(md5(file), fileReader.result)
-					this.$emit('parseQuestion', fileReader.result)
+					this.$emit('finish', fileReader.result)
 					return;
 				}
 
@@ -68,7 +73,7 @@ export default {
 					}
 					this.questionString.push(line);
 				});
-				this.$emit('parseQuestion', this.questionString)
+				this.$emit('finish', this.questionString)
 				return;
 			}
 		},

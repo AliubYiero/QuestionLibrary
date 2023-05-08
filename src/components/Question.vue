@@ -1,10 +1,15 @@
 <template>
-	<div id="question">
+	<div id="question"
+		 :tabindex="index"
+		 @focus="setViewCenter"
+		 @keydown="bindChosenBtn"
+		 @keydown.enter="checkChosenCorrect"
+	>
 		<!-- 问题 -->
 		<div class="question">
 			<span>{{ index }}. </span>
 			<span style="color: gray;">[{{ question.status }}] </span>
-			<div v-for="content in question.question" :key="index">
+			<div v-for="content in question.question" :key="question.id">
 				{{ content }}
 			</div>
 		</div>
@@ -22,7 +27,6 @@
 					:key="question.id + index"
 					:label="question.id + index"
 					class="option"
-					@keydown.enter.native="checkChosenCorrect"
 			>
 				{{ upper_alpha_list[index] }}. {{ option[0] }}
 			</component>
@@ -53,7 +57,7 @@ function compareArray(a, b) {
 	for (let i = 0; i < a.length; i++) {
 		const element = a[i]
 		if (!b.includes(element)) {
-			return false
+			return false;
 		}
 	}
 	if (a.length === b.length) {	// 多选全选对
@@ -136,6 +140,7 @@ export default {
 			}
 		},
 
+		/* 设置题目随机选项 */
 		setOptionRandom() {
 			if (this.question.status === "判断题") {
 				return
@@ -143,6 +148,29 @@ export default {
 			this.question.options.sort(() => {
 				return Math.random() - 0.5
 			})
+		},
+
+		/* 绑定键盘事件，让数字按键可以映射选项选择 */
+		bindChosenBtn(e) {
+			if (!e.key.match(/[1-9]/)) {
+				return
+			}
+
+			const optionId = parseInt(this.question.id + (e.key - 1))
+			if (this.question.status === "多选题") {
+				if (this.optionChecked.includes(optionId)) {
+					this.optionChecked = this.optionChecked.filter(id => id !== optionId)
+				} else {
+					this.optionChecked.push(optionId)
+				}
+			} else {
+				if (this.optionChecked === optionId) {
+					this.optionChecked = ''
+				} else {
+					this.optionChecked = optionId
+				}
+			}
+			console.log(`[${this.optionChecked}] 选项选择：按键映射${e.key}`);
 		},
 
 		/* 提交答案判断正确 */
@@ -181,7 +209,13 @@ export default {
 
 <style scoped>
 #question {
+	padding: 20px;
 	margin-bottom: 50px;
+	outline: none;
+}
+
+#question:focus {
+	border: 1px solid #333;
 }
 
 #question .option {

@@ -1,6 +1,6 @@
 <template>
 	<div id="question" style="overflow: visible;">
-		<UploadFile accept-format="text/plain" title="上传待解析题库文件(txt)" @parseQuestion="parseQuestion"/>
+		<UploadFile accept-format="text/plain" title="上传待解析题库文件(txt)" @finish="parseQuestion"/>
 		<el-button v-show="parseQuestionString" @click="saveFile">保存题库</el-button>
 		<!-- TODO: 自定义导入配置  -->
 		<el-button v-show="false">导入设置</el-button>

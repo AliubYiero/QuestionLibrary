@@ -8,7 +8,9 @@
 
 					<el-col :span="24">
 						<UploadFile accept-format="application/json" title="选择题库(json)"
-									@parseQuestion="getQuestionLibrary"/>
+									@finish="getQuestionLibrary"
+									@md5Check="getFileMd5"
+						/>
 					</el-col>
 
 					<template v-if="questionString">
@@ -82,16 +84,17 @@ export default {
 	data() {
 		return {
 			checkedOptions: {
-				questionNumber: false,
-				timeDisplay: false,
+				questionNumber: null,
+				timeDisplay: null,
 			},
-			questionNumber: 10,
+			questionNumber: 20,
 
 			questionString: null,
 			questionLibrary: null,
 
 			isRandomOption: true,		// 无序问题
 			isRandomQuestion: true,		// 无序选项
+			md5: null,
 		}
 	},
 
@@ -107,11 +110,17 @@ export default {
 				name: 'Test',
 				params: {
 					questionLibrary: this.questionLibrary,
-					questionNumber: this.checkedOptions.questionNumber ? this.questionNumber : this.questionLibrary.questions.length,
+					questionNumber: this.checkedOptions.questionNumber && this.questionNumber,
 					isRandomOption: this.isRandomOption,
+					md5Key: this.md5,
 					isRandomQuestion: this.isRandomQuestion,
 				}
 			})
+		},
+
+		getFileMd5(code) {
+			console.log(code);
+			this.md5 = code
 		}
 	},
 }
