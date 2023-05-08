@@ -178,7 +178,7 @@ export default {
 		setViewCenter(e) {
 			// `e.target.getBoundingClientRect()`函数获取元素和视口的距离，`.y`属性是元素顶部距离视口顶部的距离
 			// `innerHeight / 2` 是视口高度的一半，即页面中心高度
-			scrollBy(0, e.target.getBoundingClientRect().y - innerHeight / 2)
+			scrollBy(0, e.target.getBoundingClientRect().y - (innerHeight / 2) + (e.target.scrollHeight / 2))
 		},
 
 		/* 提交答案判断正确 */
