@@ -218,12 +218,13 @@ export default {
 <style scoped>
 #question {
 	padding: 20px;
+	border: 1px solid rgba(0, 0, 0, 0);
 	margin-bottom: 50px;
 	outline: none;
 }
 
 #question:focus {
-	border: 1px solid #333;
+	border: 1px solid rgba(0, 0, 0, 1);
 }
 
 #question .option {
