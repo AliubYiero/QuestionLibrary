@@ -20,7 +20,7 @@ import {
 	MenuItem,
 
 	Upload,
-	CheckboxGroup,
+	CheckboxGroup, Tooltip,
 } from 'element-ui'
 
 Vue.use(Row)
@@ -44,4 +44,5 @@ Vue.use(Menu)
 Vue.use(MenuItem)
 
 Vue.use(Upload)
+Vue.use(Tooltip)
 

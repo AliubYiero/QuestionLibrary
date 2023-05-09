@@ -1,5 +1,4 @@
 <template>
-
 	<div id="test">
 		<!-- 显示解析后题库 -->
 		<div class="question">
@@ -15,6 +14,7 @@
 							mode="question"
 							@halfCorrect="getWrongQuestions(question)"
 							@wrong="getWrongQuestions(question)"
+							@focus.native="isFocusQuestion && setViewCenter"
 					/>
 				</div>
 			</vue-lazy-component>
@@ -22,8 +22,8 @@
 		<template>
 			<el-button
 					tabindex="999"
-					@keydown.enter.native="setOriginQuestions"
-					@click.native="setOriginQuestions"
+					@keydown.enter.native="getOriginQuestions"
+					@click.native="getOriginQuestions"
 			>
 				重新做题
 			</el-button>
@@ -63,6 +63,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isFocusQuestion: {
+			type: Boolean,
+			default: true,
+		},
 		md5Key: {
 			type: String,
 		}
@@ -80,6 +84,9 @@ export default {
 		defaultSetting() {
 			// console.log("进入答题界面");
 			// console.log(this.questionLibrary);
+			if (!this.questionLibrary) {
+				this.$router.push("/");
+			}
 
 			if (this.questionNumber) {
 				this.questionNumberLimiter()	// 设置题目数量
@@ -123,6 +130,13 @@ export default {
 			this.questionLibrary.questions = newQuestions
 		},
 
+		/* 设置视口高度，让聚焦元素始终在页面中间 */
+		setViewCenter(e) {
+			// `e.target.getBoundingClientRect()`函数获取元素和视口的距离，`.y`属性是元素顶部距离视口顶部的距离
+			// `innerHeight / 2` 是视口高度的一半，即页面中心高度
+			scrollBy(0, e.target.getBoundingClientRect().y - (innerHeight / 2) + (e.target.scrollHeight / 2))
+		},
+
 		/* 记录错误问题 */
 		getWrongQuestions(question) {
 			this.wrongQuestions.set(question.id, question)
@@ -130,7 +144,7 @@ export default {
 		setWrongQuestions() {
 			this.questionLibrary.questions = Array.from(this.wrongQuestions.values())
 		},
-		setOriginQuestions() {
+		getOriginQuestions() {
 			const sessionStorage = new SessionStorage();
 			this.questionLibrary = JSON.parse(sessionStorage.get(this.md5Key))
 			this.defaultSetting()

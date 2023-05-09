@@ -1,7 +1,6 @@
 <template>
 	<div id="question"
 		 :tabindex="index"
-		 @focus="setViewCenter"
 		 @keydown="bindChosenBtn"
 		 @keydown.enter="checkChosenCorrect"
 	>
@@ -90,7 +89,8 @@ export default {
 		isRandomOption: {
 			type: Boolean,
 			default: false,
-		}
+		},
+
 	},
 
 	data() {
@@ -174,12 +174,6 @@ export default {
 			console.log(`[${this.optionChecked}] 选项选择：按键映射${e.key}`);
 		},
 
-		/* 设置视口高度，让聚焦元素始终在页面中间 */
-		setViewCenter(e) {
-			// `e.target.getBoundingClientRect()`函数获取元素和视口的距离，`.y`属性是元素顶部距离视口顶部的距离
-			// `innerHeight / 2` 是视口高度的一半，即页面中心高度
-			scrollBy(0, e.target.getBoundingClientRect().y - (innerHeight / 2) + (e.target.scrollHeight / 2))
-		},
 
 		/* 提交答案判断正确 */
 		checkChosenCorrect() {

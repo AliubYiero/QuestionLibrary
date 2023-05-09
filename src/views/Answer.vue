@@ -39,6 +39,13 @@
 							<el-checkbox v-model="isRandomOption">随机选项</el-checkbox>
 						</el-col>
 
+						<el-col :span="24">
+							<el-tooltip class="item" content="选中问题后自动聚焦到页面中心" effect="dark"
+										placement="right">
+								<el-checkbox v-model="isFocusQuestion">专注模式</el-checkbox>
+							</el-tooltip>
+						</el-col>
+
 						<el-col v-if="false" :span="24">
 							<!-- TODO: 答完一题立即显示答案 -->
 							<el-checkbox>立即显示答案</el-checkbox>
@@ -94,6 +101,7 @@ export default {
 
 			isRandomOption: true,		// 无序问题
 			isRandomQuestion: true,		// 无序选项
+			isFocusQuestion: false,		// 专注模式
 			md5: null,
 		}
 	},
