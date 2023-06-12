@@ -37,7 +37,8 @@
 
 <script>
 import Question from "@/components/Question.vue";
-import SessionStorage from "@/js/SessionStorage";
+import SessionStorage from "@/class/SessionStorage";
+import MapManager from "@/class/MapManager";
 
 export default {
 	name: "Test",
@@ -82,9 +83,10 @@ export default {
 	methods: {
 		/* 默认设置 */
 		defaultSetting() {
-			// console.log("进入答题界面");
-			// console.log(this.questionLibrary);
+			console.log("进入答题界面");
+			/* 查询不到题目数据，自动跳转至Answer选择页面 */
 			if (!this.questionLibrary) {
+				console.log('查询不到题库数据，跳转至开始界面');
 				this.$router.push("/");
 			}
 
@@ -94,10 +96,12 @@ export default {
 			if (this.isRandomQuestion) {
 				this.randomQuestionSetting()	// 设置乱序题目
 			}
+			console.log('显示题目');
 		},
 
 		/* 乱序题目设置 */
 		randomQuestionSetting() {
+			console.log('开始打乱题目顺序');
 			this.questionLibrary.questions.sort(() => {
 				return 0.5 - Math.random()
 			})
@@ -105,7 +109,7 @@ export default {
 
 		/* 限制题目数量 */
 		questionNumberLimiter() {
-			console.log(1);
+			console.log('开始筛选题目，限定题目数量');
 			let questionsIndex = [];
 			// console.log(this.questionLibrary.questions.length);
 			for (let i = 0; i < this.questionLibrary.questions.length; i++) {
@@ -144,6 +148,7 @@ export default {
 		setWrongQuestions() {
 			this.questionLibrary.questions = Array.from(this.wrongQuestions.values())
 		},
+		/* 从SessionStorage获取原始题库数据 */
 		getOriginQuestions() {
 			const sessionStorage = new SessionStorage();
 			this.questionLibrary = JSON.parse(sessionStorage.get(this.md5Key))

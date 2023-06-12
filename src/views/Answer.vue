@@ -3,62 +3,33 @@
 		<el-container>
 			<!-- TODO: 读取题库, 渲染到当前容器 -->
 			<el-header class="aside__questions">
-
-				<el-row style="flex-direction: column; text-align: center;" type="flex">
-
-					<el-col :span="24">
+				<el-container>
+					<el-header>
 						<UploadFile accept-format="application/json" title="选择题库(json)"
 									@finish="getQuestionLibrary"
 									@md5Check="getFileMd5"
 						/>
-					</el-col>
+					</el-header>
+					<el-main v-if="questionString"
+							 class="option-container"
+							 type="flex">
+						<el-button class="item" @click="linkTest">开始答题</el-button>
+						<el-checkbox v-model="checkedOptions.questionNumber" class="item">选择题量</el-checkbox>
+						<el-input-number
+								v-model="questionNumber"
+								:max="questionLibrary.questions.length"
+								:min="1"
+								class="item"
+						/>
+						<el-checkbox v-model="isRandomQuestion" class="item">随机答题</el-checkbox>
+						<el-checkbox v-model="isRandomOption" class="item">随机选项</el-checkbox>
+						<el-tooltip class="item" content="选中问题后自动聚焦到页面中心" effect="dark"
+									placement="right">
+							<el-checkbox v-model="isFocusQuestion">专注模式</el-checkbox>
+						</el-tooltip>
+					</el-main>
+				</el-container>
 
-					<template v-if="questionString">
-						<el-col :span="24">
-							<el-button @click="linkTest">开始答题</el-button>
-						</el-col>
-
-						<el-col :span="24">
-							<!-- TODO: 刷题题量, Max:题库最大数 -->
-							<el-checkbox v-model="checkedOptions.questionNumber">选择题量</el-checkbox>
-						</el-col>
-						<el-col v-show="checkedOptions.questionNumber" :span="24">
-							<el-input-number
-									v-model="questionNumber"
-									:max="questionLibrary.questions.length"
-									:min="1"
-							>
-							</el-input-number>
-						</el-col>
-
-						<el-col :span="24">
-							<el-checkbox v-model="isRandomQuestion">随机答题</el-checkbox>
-						</el-col>
-
-						<el-col :span="24">
-							<el-checkbox v-model="isRandomOption">随机选项</el-checkbox>
-						</el-col>
-
-						<el-col :span="24">
-							<el-tooltip class="item" content="选中问题后自动聚焦到页面中心" effect="dark"
-										placement="right">
-								<el-checkbox v-model="isFocusQuestion">专注模式</el-checkbox>
-							</el-tooltip>
-						</el-col>
-
-						<el-col v-if="false" :span="24">
-							<!-- TODO: 答完一题立即显示答案 -->
-							<el-checkbox>立即显示答案</el-checkbox>
-						</el-col>
-
-
-						<el-col v-if="false" :span="24">
-							<!-- TODO: 题目完成全部做过之后仍然继续答题 -->
-							<el-checkbox>循环答题</el-checkbox>
-						</el-col>
-					</template>
-
-				</el-row>
 			</el-header>
 
 			<!-- TODO: 答案组件 -->
@@ -83,6 +54,7 @@
 <script>
 import UploadFile from "@/components/UploadFile.vue";
 import Question from "@/components/Question.vue";
+import MapManager from "@/class/MapManager";
 
 export default {
 	name: "Answer",
@@ -108,12 +80,19 @@ export default {
 
 	methods: {
 		getQuestionLibrary(questionString) {
+			console.log('开始获取问题题库');
 			this.questionString = questionString
 			this.questionLibrary = JSON.parse(questionString)
-			// console.log(this.questionLibrary);
+
+			console.log('正在检查问题重复性');
+			const map = MapManager.toMap(this.questionLibrary.questions, "id")
+			this.questionLibrary.questions = map.toArray();
+
+			console.log('开始渲染题库');
 		},
 
 		linkTest() {
+			console.log('跳转至答题页面');
 			this.$router.push({
 				name: 'Test',
 				params: {
@@ -136,12 +115,21 @@ export default {
 
 <style scoped>
 .el-main__flex_config {
-	margin: 100px 0 0 20%;
+	margin: 200px 0 0 20%;
 	width: 60%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
 	align-items: center;
+}
+
+.option-container {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+.option-container item {
 }
 </style>

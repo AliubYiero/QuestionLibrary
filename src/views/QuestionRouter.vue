@@ -36,7 +36,7 @@
 
 <script>
 import FileSaver from "file-saver"
-import QuestionReader from "@/js/QuestionReader";
+import QuestionReader from "@/class/QuestionReader";
 import UploadFile from "@/components/UploadFile.vue";
 import Question from "@/components/Question";
 import {Message} from "element-ui";

@@ -14,7 +14,7 @@
 
 <script>
 import md5 from "md5";
-import SessionStorage from '@/js/SessionStorage'
+import SessionStorage from '@/class/SessionStorage'
 
 export default {
 	name: "UploadFile",

@@ -1,3 +1,5 @@
+import MapManager from "@/class/MapManager";
+
 /*
 * 字符串转hash
 * */
@@ -80,7 +82,7 @@ export default class QuestionReader {
 		this.lineList = lineList;
 		this.parseQuestionString = {
 			title: '',
-			questions: new Map(),
+			questions: new MapManager(),
 		};
 
 		this.isFirstLine = true;
@@ -265,7 +267,7 @@ export default class QuestionReader {
 		})
 
 		// 将Map对象转Object，再进行Json字符串序列化
-		this.parseQuestionString.questions = Array.from(this.parseQuestionString.questions.values())
+		this.parseQuestionString.questions = this.parseQuestionString.questions.toArray();
 		return JSON.stringify(this.parseQuestionString);
 	}
 }

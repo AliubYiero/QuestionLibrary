@@ -1,6 +1,5 @@
 export default class SessionStorage {
 	constructor() {
-
 	}
 
 	get(key) {

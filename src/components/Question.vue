@@ -105,8 +105,9 @@ export default {
 
 	methods: {
 		defaultSetting() {
+			console.log(`开始解析题目${this.index} [${this.question.id}]：${this.question.question}`);
 			if (this.isRandomOption) {	// 设置随机选项
-				this.setOptionRandom()
+				this.setOptionRandom();
 			}
 			this.checkDisplayMode();	// 设置显示模式
 			this.checkQuestionType();	// 设置问题类型（用于选项的按钮类型输出）
@@ -142,6 +143,7 @@ export default {
 
 		/* 设置题目随机选项 */
 		setOptionRandom() {
+			console.log('设置题目随机选项');
 			if (this.question.status === "判断题") {
 				return
 			}
@@ -152,7 +154,7 @@ export default {
 
 		/* 绑定键盘事件，让数字按键可以映射选项选择 */
 		bindChosenBtn(e) {
-			console.log(e);
+			console.log(`[${this.optionChecked}] 选项选择：按键映射${e.key}`);
 			if (!e.key.match(/[1-9]/)) {
 				return
 			}
@@ -171,12 +173,12 @@ export default {
 					this.optionChecked = optionId
 				}
 			}
-			console.log(`[${this.optionChecked}] 选项选择：按键映射${e.key}`);
 		},
 
 
 		/* 提交答案判断正确 */
 		checkChosenCorrect() {
+			console.log('开始判断答案是否正确');
 			// 没有选择选项
 			console.log(this.optionChecked[0]);
 			if (!(this.optionChecked[0] || typeof this.optionChecked === "number")) {
